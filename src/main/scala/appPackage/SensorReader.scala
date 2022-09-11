@@ -26,24 +26,21 @@ trait SensorReader {
     ???
   }
 
-  def translateToSensorInput(listOfFile: List[File]): List[SensorInput] = {
+  def translateToSensorInput(listOfFile: List[File]): List[List[SensorInput]] = {
     ???
   }
 
-  def translateToSensorOutput(listOfFile: List[File]): List[SensorOutput] = {
+  def translateToSensorOutput(listOfListOfSensorInput: List[List[SensorInput]]): List[List[SensorOutput]] = {
     ???
   }
 
-  def howManyProcessed(): Int = {
-    ???
+  def howManyProcessed(listOfFile: List[File]): Int = listOfFile.length
+
+  def howManyMeasurementsFailedAndProcessed(listOfListOfSensorInput: List[List[SensorInput]],
+                                            listOfListOfSensorOutput: List[List[SensorOutput]]): (Int,Int) = {
+    (listOfListOfSensorInput.length - listOfListOfSensorOutput.length, listOfListOfSensorOutput.length)
   }
 
-  def howManyMeasurementsFailed(): Int = {
-    ???
-  }
-  def howManyMeasurementsProcessed(): Int = {
-    ???
-  }
 
 
 
