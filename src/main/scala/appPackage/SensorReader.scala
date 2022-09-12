@@ -1,15 +1,23 @@
 package appPackage
 
+import appPackage.dto.{SensorInputDto, SensorOutputDtoList}
 import com.github.tototoshi.csv.CSVReader
 import appPackage.model.{SensorInput, SensorOutput}
+import appPackage.view.Viewer
 
 import java.io.File
-import java.nio.file.Files
-import scala.collection.immutable.List
 
 trait SensorReader {
-  def run(): Unit = {
-
+  def run(filePath: String): Unit = {
+    val listOfFile = getListOfFiles(filePath)
+    val listOfSensorInputXFile = translateToSensorInput(listOfFile)
+    Viewer.viewerForSensorInputWithFile(listOfSensorInputXFile)
+    val listOfSensorInput = listOfSensorInputXFileToListOfSensorInput(listOfSensorInputXFile)
+    val listOfSensorOutput = translateToSensorOutput(listOfSensorInput)
+    Viewer.viewerForInts("Num of processed files",howManyProcessed(listOfFile))
+    Viewer.viewerForInts("Num of processed measurements",listOfSensorInput.length)
+    Viewer.viewerForInts("Num of failed measurements",listOfSensorInput.count(x=>x.humidity=="NaN"))
+    Viewer.viewerForSensorOutput(listOfSensorOutput)
 
   }
 
@@ -22,28 +30,20 @@ trait SensorReader {
     }
   }
 
-  def readCsv(listOfFile: List[File]): List[List[String]] = {
-    ???
+  def translateToSensorInput(listOfFile: List[File]): List[(String, List[SensorInput])] = {
+    listOfFile.map(x => (x.getName, CSVReader.open(x).all().map(y =>(new SensorInputDto(y)).toSensorInput())))
   }
 
-  def translateToSensorInput(listOfFile: List[File]): List[List[SensorInput]] = {
-    ???
+  def translateToSensorOutput(listOfListOfSensorInput:  List[SensorInput]): List[SensorOutput] = {
+    new SensorOutputDtoList( listOfListOfSensorInput).toSensorOutput()
   }
 
-  def translateToSensorOutput(listOfListOfSensorInput: List[List[SensorInput]]): List[List[SensorOutput]] = {
-    ???
+  def listOfSensorInputXFileToListOfSensorInput(listOfListOfSensorInputXFile: List[(String, List[SensorInput])]): List[SensorInput] ={
+    listOfListOfSensorInputXFile.flatMap(x => x._2).filter(y=>y.sensorId!="sensor-id")
   }
+
 
   def howManyProcessed(listOfFile: List[File]): Int = listOfFile.length
 
-  def howManyMeasurementsFailedAndProcessed(listOfListOfSensorInput: List[List[SensorInput]],
-                                            listOfListOfSensorOutput: List[List[SensorOutput]]): (Int,Int) = {
-    (listOfListOfSensorInput.length - listOfListOfSensorOutput.length, listOfListOfSensorOutput.length)
-  }
 
-
-
-
-
-  //tu ma być logika
 }

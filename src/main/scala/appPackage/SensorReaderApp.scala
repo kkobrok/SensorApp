@@ -9,11 +9,7 @@ object SensorReaderApp {
 
   def main(args: Array[String]): Unit = {
     val cmdParams = SensorReaderAppParams.parseArgs(args)
-    val valueOfPath = cmdParams.filePath
-      println(cmdParams.toString)
-      println(valueOfPath.toString)
-    val reader = CSVReader.open(new File(valueOfPath.toString))
-    println(reader.all())
+    LiveSensorReader().run(cmdParams.filePath)
   }
 //tu ma byc tylko main params i odpalenie live matintece  czyly sensor reader
 }
