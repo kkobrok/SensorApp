@@ -4,7 +4,7 @@ import appPackage.model.{SensorInput, SensorOutput, SensorOutputTemp}
 
 import scala.annotation.tailrec
 
-
+//TODO
 final class SensorOutputDtoList(sensorInputList: List[SensorInput]) {
   def toSensorOutput(): List[SensorOutput] = {
     val test = sensorInputToSensorOutputTemp(sensorInputList, List[SensorOutputTemp]())
@@ -29,7 +29,7 @@ final class SensorOutputDtoList(sensorInputList: List[SensorInput]) {
 
   def average(s: Seq[Double]): Double = s.foldLeft((0.0, 1))((acc, i) => ((acc._1 + (i - acc._1) / acc._2), acc._2 + 1))._1
 
-
+//TODO
   def sensorInputToSensorOutput(listSensorOutput: List[SensorOutputTemp]): List[SensorOutput] = {
     if (listSensorOutput.isEmpty) {
       Nil
